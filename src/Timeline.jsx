@@ -1,20 +1,27 @@
-
 import React, { useState } from "react";
 
-const generatePlaceholderData = () => {
+// Timeline data using actual filenames
+const generateData = () => {
+  const labels = [
+    { name: "Clean Water", file: "clean-water" },
+    { name: "Health Camp", file: "health-camp" },
+    { name: "Education Outreach", file: "education-outreach" },
+    { name: "Tree Plantation", file: "tree-plantation" }
+  ];
+
   const data = {};
   for (let year = 2011; year <= 2025; year++) {
-    data[year] = Array.from({ length: 4 }).map((_, i) => ({
-      title: `Initiative ${i + 1}`,
-      image: "https://via.placeholder.com/1080",
-      shortDescription: `Short description of Initiative ${i + 1} in ${year}`,
-      longDescription: `Detailed explanation of Initiative ${i + 1} carried out in the year ${year}, its purpose, execution, and impact.`
+    data[year] = labels.map((label) => ({
+      title: label.name,
+      image: `/images/${year}-${label.file}.jpg`,
+      shortDescription: `${label.name} initiative carried out in ${year}`,
+      longDescription: `A comprehensive look at the ${label.name.toLowerCase()} program executed in ${year}, focusing on impact and outreach.`
     }));
   }
   return data;
 };
 
-const timelineData = generatePlaceholderData();
+const timelineData = generateData();
 
 const Modal = ({ isOpen, onClose, initiative }) => {
   if (!isOpen || !initiative) return null;
@@ -42,7 +49,6 @@ const Modal = ({ isOpen, onClose, initiative }) => {
 
 const Timeline = () => {
   const years = Object.keys(timelineData);
-  const [selectedYear, setSelectedYear] = useState(years[0]);
   const [selected, setSelected] = useState(null);
 
   const handleClick = (initiative) => {
@@ -54,50 +60,39 @@ const Timeline = () => {
   };
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
+    <div className="p-4 max-w-full overflow-x-auto">
       <h1 className="text-4xl font-bold text-center my-8">Our Journey</h1>
-
-      <div className="flex overflow-x-auto gap-4 mb-8 py-2 px-1 border-b">
+      <div className="flex space-x-8 overflow-x-auto pb-4 px-2 snap-x snap-mandatory">
         {years.map((year) => (
-          <button
+          <div
             key={year}
-            onClick={() => setSelectedYear(year)}
-            className={`px-4 py-2 whitespace-nowrap rounded-full transition-all font-medium ${
-              year === selectedYear
-                ? "bg-blue-600 text-white shadow"
-                : "bg-white text-blue-600 border border-blue-600 hover:bg-blue-100"
-            }`}
+            className="min-w-[300px] snap-start flex-shrink-0 bg-gray-100 rounded-lg p-4 shadow-md"
           >
-            {year}
-          </button>
+            <h2 className="text-xl font-semibold mb-4 text-center">{year}</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {timelineData[year].map((initiative, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => handleClick(initiative)}
+                  className="cursor-pointer bg-white rounded-lg shadow hover:shadow-xl transition-transform transform hover:scale-105 duration-200 overflow-hidden"
+                >
+                  <img
+                    src={initiative.image}
+                    alt={initiative.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-3">
+                    <h3 className="text-md font-medium">{initiative.title}</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {initiative.shortDescription}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
-
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">{selectedYear}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {timelineData[selectedYear].map((initiative, idx) => (
-            <div
-              key={idx}
-              onClick={() => handleClick(initiative)}
-              className="cursor-pointer bg-white rounded-lg shadow hover:shadow-xl transition-transform transform hover:scale-105 duration-200 overflow-hidden"
-            >
-              <img
-                src={initiative.image}
-                alt={initiative.title}
-                className="w-full h-60 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-medium">{initiative.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  {initiative.shortDescription}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <Modal isOpen={!!selected} onClose={closeModal} initiative={selected} />
     </div>
   );
