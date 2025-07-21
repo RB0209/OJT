@@ -1,7 +1,42 @@
-
 import React, { useState } from "react";
-import { timelineData } from "./data";
 import Modal from "./Modal";
+
+const generateTimelineData = () => {
+  const data = {};
+  const titles = [
+    "Clean Water Drive",
+    "Health Camp",
+    "Education Outreach",
+    "Tree Plantation"
+  ];
+
+  const descriptions = [
+    "Short summary of clean water project.",
+    "Short summary of health camp.",
+    "Short summary of education outreach.",
+    "Short summary of tree plantation."
+  ];
+
+  const longDescriptions = [
+    "Full details of clean water project—its goals, execution, and impact.",
+    "Detailed explanation of the health camp and how it helped the community.",
+    "In-depth summary of the education outreach program's success.",
+    "Comprehensive description of the tree plantation and its benefits."
+  ];
+
+  for (let year = 2011; year <= 2025; year++) {
+    data[year] = Array.from({ length: 4 }).map((_, i) => ({
+      title: titles[i],
+      image: `/images/${year}-${titles[i].toLowerCase().replace(/\s+/g, "-")}.jpg`,
+      shortDescription: descriptions[i],
+      longDescription: longDescriptions[i]
+    }));
+  }
+
+  return data;
+};
+
+const timelineData = generateTimelineData();
 
 const Timeline = () => {
   const [selected, setSelected] = useState(null);
