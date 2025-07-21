@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { timelineData } from "./timelineData";
+import { timelineData } from "../timelineData"; // Adjusted import path
 import Modal from "./Modal";
 
 const Timeline = () => {
@@ -17,14 +17,14 @@ const Timeline = () => {
     <div className="p-4 max-w-7xl mx-auto">
       <h1 className="text-4xl font-bold text-center my-8">Our Journey</h1>
       {Object.entries(timelineData).map(([year, initiatives]) => (
-        <div key={year} className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4 border-b border-gray-300 pb-2">{year}</h2>
+        <div key={year} className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">{year}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {initiatives.map((initiative, idx) => (
               <div
                 key={idx}
                 onClick={() => handleClick(initiative)}
-                className="cursor-pointer bg-white rounded-xl shadow hover:shadow-lg transition-shadow transform hover:scale-105 duration-200 overflow-hidden"
+                className="cursor-pointer bg-white rounded-lg shadow hover:shadow-xl transition-shadow transform hover:scale-105 duration-200 overflow-hidden"
               >
                 <img
                   src={initiative.image}
@@ -32,7 +32,7 @@ const Timeline = () => {
                   className="w-full h-60 object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold">{initiative.title}</h3>
+                  <h3 className="text-lg font-medium">{initiative.title}</h3>
                   <p className="text-sm text-gray-600 mt-1">
                     {initiative.shortDescription}
                   </p>
