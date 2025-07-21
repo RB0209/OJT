@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { timelineData } from "../data/timelineData";
+import { timelineData } from "./timelineData";
 import Modal from "./Modal";
 
 const Timeline = () => {
